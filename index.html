@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracey Scott — Live Portfolio Deck</title>
+<meta name="description" content="Live, animated portfolio deck for Tracey Scott — Cybersecurity, Cloud, and SOC professional.">
+<style>
+  :root{
+    --forest:#2C5F2D; --moss:#97BC62; --cream:#F5F5F5;
+    --gold:#D4A017; --dark:#1A2E1A; --muted:#6B7C5C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Calibri,sans-serif;
+    background:radial-gradient(ellipse at top,#1A2E1A 0%,#0A1A0A 100%);
+    color:var(--cream);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;
+  }
+
+  /* Animated background blobs */
+  body::before,body::after{
+    content:"";position:fixed;width:600px;height:600px;border-radius:50%;
+    filter:blur(120px);opacity:.18;z-index:0;pointer-events:none;
+  }
+  body::before{background:var(--moss);top:-200px;left:-200px;animation:float1 18s ease-in-out infinite;}
+  body::after{background:var(--gold);bottom:-200px;right:-200px;animation:float2 22s ease-in-out infinite;}
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(120px,80px)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-120px,-80px)}}
+
+  header{
+    background:rgba(44,95,45,.85);backdrop-filter:blur(12px);
+    padding:16px 28px;display:flex;justify-content:space-between;align-items:center;
+    border-bottom:3px solid var(--gold);position:relative;z-index:10;flex-wrap:wrap;gap:12px;
+    animation:slideDown .8s ease-out;
+  }
+  @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+  header h1{font-family:Georgia,serif;font-size:22px;color:var(--cream);letter-spacing:1px;}
+  header h1 span{color:var(--gold);}
+  .actions a{
+    color:var(--cream);text-decoration:none;padding:9px 16px;
+    border:1px solid var(--moss);border-radius:6px;margin-left:8px;font-size:13px;
+    transition:all .25s;display:inline-block;
+  }
+  .actions a:hover{background:var(--gold);border-color:var(--gold);color:var(--forest);transform:translateY(-2px);box-shadow:0 6px 16px rgba(212,160,23,.4);}
+
+  .stage{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    padding:32px 24px;position:relative;z-index:5;
+  }
+  .slide-wrap{
+    width:100%;max-width:1200px;aspect-ratio:16/9;background:#000;
+    border-radius:12px;overflow:hidden;position:relative;
+    box-shadow:0 25px 80px rgba(0,0,0,.7),0 0 0 1px rgba(151,188,98,.2);
+    animation:zoomIn .9s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes zoomIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+  .slide-wrap img{
+    width:100%;height:100%;object-fit:contain;
+    position:absolute;top:0;left:0;opacity:0;
+    transform:scale(1.05);transition:opacity .55s ease,transform .8s ease;
+  }
+  .slide-wrap img.active{opacity:1;transform:scale(1);}
+  .slide-wrap img.exit-left{opacity:0;transform:translateX(-50px) scale(.98);}
+  .slide-wrap img.exit-right{opacity:0;transform:translateX(50px) scale(.98);}
+
+  .nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:rgba(44,95,45,.9);color:var(--cream);border:none;
+    width:54px;height:54px;border-radius:50%;font-size:26px;cursor:pointer;
+    transition:all .25s;display:flex;align-items:center;justify-content:center;
+    z-index:20;backdrop-filter:blur(8px);
+  }
+  .nav:hover{background:var(--gold);color:var(--forest);transform:translateY(-50%) scale(1.1);box-shadow:0 8px 24px rgba(212,160,23,.5);}
+  .prev{left:32px;} .next{right:32px;}
+
+  footer{
+    background:rgba(44,95,45,.85);backdrop-filter:blur(12px);
+    padding:16px 28px;display:flex;justify-content:space-between;align-items:center;
+    border-top:3px solid var(--gold);flex-wrap:wrap;gap:14px;position:relative;z-index:10;
+    animation:slideUp .8s ease-out;
+  }
+  @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  .thumbs{display:flex;gap:8px;flex-wrap:wrap;}
+  .thumbs button{
+    width:40px;height:26px;border:1px solid var(--moss);background:transparent;
+    color:var(--cream);cursor:pointer;border-radius:4px;font-size:12px;font-weight:600;
+    transition:all .2s;
+  }
+  .thumbs button:hover{transform:translateY(-3px);}
+  .thumbs button.active{background:var(--gold);border-color:var(--gold);color:var(--forest);box-shadow:0 4px 10px rgba(212,160,23,.4);}
+
+  .counter{color:var(--cream);font-size:14px;font-weight:500;}
+  .counter strong{color:var(--gold);font-size:18px;font-family:Georgia,serif;}
+
+  .progress{
+    position:absolute;top:0;left:0;height:3px;background:var(--gold);
+    width:0;transition:width .4s ease;z-index:30;
+  }
+
+  .play-btn{
+    background:transparent;border:1px solid var(--moss);color:var(--cream);
+    padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;
+    transition:all .2s;
+  }
+  .play-btn:hover{background:var(--gold);color:var(--forest);border-color:var(--gold);}
+  .play-btn.playing{background:var(--gold);color:var(--forest);border-color:var(--gold);}
+
+  @media(max-width:768px){
+    .nav{width:42px;height:42px;font-size:22px;}
+    .prev{left:8px;} .next{right:8px;}
+    header h1{font-size:17px;}
+    .actions a{padding:7px 11px;font-size:12px;margin-left:5px;}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header>
+  <h1>TRACEY SCOTT <span>•</span> Portfolio Deck</h1>
+  <div class="actions">
+    <a href="Tracey-Scott-Portfolio.pptx" download>Download .pptx</a>
+    <a href="Tracey-Scott-Portfolio.pdf" download>Download .pdf</a>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="slide-wrap" id="stage">
+    <img src="slide-1.jpg" alt="Slide 1" class="active">
+    <img src="slide-2.jpg" alt="Slide 2">
+    <img src="slide-3.jpg" alt="Slide 3">
+    <img src="slide-4.jpg" alt="Slide 4">
+    <img src="slide-5.jpg" alt="Slide 5">
+    <img src="slide-6.jpg" alt="Slide 6">
+    <img src="slide-7.jpg" alt="Slide 7">
+    <img src="slide-8.jpg" alt="Slide 8">
+    <button class="nav prev" onclick="go(-1)" aria-label="Previous">‹</button>
+    <button class="nav next" onclick="go(1)" aria-label="Next">›</button>
+  </div>
+</main>
+
+<footer>
+  <div class="thumbs" id="thumbs"></div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ Auto-play</button>
+    <div class="counter">Slide <strong id="cur">1</strong> / 8</div>
+  </div>
+</footer>
+
+<script>
+  const imgs=document.querySelectorAll('#stage img');
+  const thumbs=document.getElementById('thumbs');
+  const cur=document.getElementById('cur');
+  const progress=document.getElementById('progress');
+  const playBtn=document.getElementById('playBtn');
+  let i=0,playing=false,timer=null;
+
+  imgs.forEach((_,idx)=>{
+    const b=document.createElement('button');
+    b.textContent=idx+1;
+    b.onclick=()=>show(idx);
+    thumbs.appendChild(b);
+  });
+
+  function show(n,dir){
+    const prev=i;
+    i=(n+imgs.length)%imgs.length;
+    imgs.forEach((im,idx)=>{
+      im.classList.remove('active','exit-left','exit-right');
+      if(idx===i)im.classList.add('active');
+      else if(idx===prev)im.classList.add(dir>0?'exit-left':'exit-right');
+    });
+    thumbs.querySelectorAll('button').forEach((b,idx)=>b.classList.toggle('active',idx===i));
+    cur.textContent=i+1;
+    progress.style.width=((i+1)/imgs.length*100)+'%';
+  }
+  function go(d){show(i+d,d);}
+
+  function togglePlay(){
+    playing=!playing;
+    playBtn.classList.toggle('playing',playing);
+    playBtn.textContent=playing?'⏸ Pause':'▶ Auto-play';
+    if(playing){timer=setInterval(()=>go(1),4000);}
+    else{clearInterval(timer);}
+  }
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')go(1);
+    if(e.key==='ArrowLeft')go(-1);
+    if(e.key==='Home')show(0,-1);
+    if(e.key==='End')show(imgs.length-1,1);
+  });
+
+  let tx=0;
+  document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>40)go(dx<0?1:-1);
+  });
+
+  show(0,1);
+</script>
+</body>
+</html>
